@@ -52,3 +52,23 @@ GameSquare.prototype.setflag = function(flag) {
   this.flag = flag;
   this.el.children[0].children[1].classList.add(flag);
 }
+
+// Defining an array to hold all the objects inside GameSquare
+let gameSquares = [];
+
+// This function will get a reference to the game-square div of all the elements. And make each of them initialize with a DOM element and a flag.
+// This is the function to call in the index to start the game.
+function setupGame() {
+    let array = document.getElementsByClassName("game-square");
+    let randomflags = getSomeflags(); // Get array of 8 random flag pairs.
+    for ( let i = 0; i < array.length; i++) {
+        let index = random(randomflags.length); // Get a random index.
+        let flag = randomflags.splice(index, 1)[0];  // Get the flag at that index
+        gameSquares.push(new GameSquare(array[i], flag));
+    }
+}
+// This function returns a number 0 to n - 1. This is because we need to get "random" items from an array which requires an integer.
+function random(n) {
+    return Math.floor(Math.random() * n);
+}
+
