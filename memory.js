@@ -1,3 +1,4 @@
+// Variable to use to check how many squares are open to solve bug with clicking multiple squares fast
 let areOpen = 0;
 // DOM element Reset button using ID to ALWAYS return a SINGLE element.
 let resetButton = document.getElementById("reset-button");
@@ -20,10 +21,10 @@ function GameSquare(el, flag) {
 }
 
 
-// This method will be called at when an event occurs. 
-// In this case when a click happens, it will look if the square is already opened with isOpen = true; or if its locked with || isLocked == true and what is true about both scenarios is that we should ignore the click event. 
-// If above is not true we need to mark the clicked square as open and make it "flip" or whatever we want to happen. 
-GameSquare.prototype.handleEvent = function (e) {
+// This method will be called at when an event occurs.
+// In this case when a click happens, it will look if the square is already opened with isOpen = true; or if its locked with || isLocked == true and what is true about both scenarios is that we should ignore the click event.
+// If above is not true we need to mark the clicked square as open and make it "flip" or whatever we want to happen.
+GameSquare.prototype.handleEvent = function(e) {
   switch (e.type) {
     case "click":
       if (this.isOpen || this.isLocked || areOpen == 2) {
@@ -36,20 +37,20 @@ GameSquare.prototype.handleEvent = function (e) {
   }
 }
 // This step is to set the el ( game square) to false in both open and locked state and also remove the flip class. This step is crucial in the case where there is not a match you need the squares to flip back to default.
-GameSquare.prototype.reset = function () {
+GameSquare.prototype.reset = function() {
   this.isOpen = false;
   this.isLocked = false;
   this.el.classList.remove('flip');
 }
 
-// This is to lock in matched squares. This is why we set both isLocked and IsOpen to true. This will ensure that they are not getting flipped back to default or can be clicked anymore. 
-GameSquare.prototype.lock = function () {
+// This is to lock in matched squares. This is why we set both isLocked and IsOpen to true. This will ensure that they are not getting flipped back to default or can be clicked anymore.
+GameSquare.prototype.lock = function() {
   this.isLocked = true;
   this.isOpen = true;
 }
 
-// When we reset the game the flags need to be shuffle to new positions. setFlag will assign a new flag to each square. 
-GameSquare.prototype.setflag = function (flag) {
+// When we reset the game the flags need to be shuffle to new positions. setFlag will assign a new flag to each square.
+GameSquare.prototype.setflag = function(flag) {
   this.el.children[0].children[1].classList.remove(this.flag);
   this.flag = flag;
   this.el.children[0].children[1].classList.add(flag);
@@ -75,8 +76,8 @@ function random(n) {
 }
 
 
-// The game has 16 squares as required by Elina. This pickout 8 of the random flags that i have set in the CSS, and makes an array with a duplicate of each flag. 
-// So this function will return 8 * 2 flags. 
+// The game has 16 squares as required by Elina. This pickout 8 of the random flags that i have set in the CSS, and makes an array with a duplicate of each flag.
+// So this function will return 8 * 2 flags.
 function getSomeflags() {
   let flagscopy = flags.slice();
   // Define a new empty array
@@ -93,8 +94,8 @@ let firstSquare = null;
 
 // gameSquare as parameter
 // First we check if what we click is the first square clicked. And if the firstSquare is set to null which it is, we set firstSquare to gameSquare.
-// if firstSquare is not null then we need it to ask if the flag of the firstSquare and gameSquare are a match, and if they match we need to .lock(). And if not a match we need them to close. 
-// We are using a setTimeout for the function to add a delay of the execute. 
+// if firstSquare is not null then we need it to ask if the flag of the firstSquare and gameSquare are a match, and if they match we need to .lock(). And if not a match we need them to close.
+// We are using a setTimeout for the function to add a delay of the execute.
 function checkGame(gameSquare) {
   if (firstSquare === null) {
     firstSquare = gameSquare;
@@ -109,7 +110,7 @@ function checkGame(gameSquare) {
   } else {
     let a = firstSquare;
     let b = gameSquare;
-    setTimeout(function () {
+    setTimeout(function() {
       a.reset();
       b.reset();
       areOpen = 0;
@@ -122,17 +123,17 @@ function checkGame(gameSquare) {
 // This function assigns new flags on reset. It is looping through all of the game files and pulling a random flag out and settings flags to the squares.
 function randomizeflags() {
   let randomflags = getSomeflags();
-  gameSquares.forEach(function (gameSquare) {
+  gameSquares.forEach(function(gameSquare) {
     let flag = randomflags.splice(random(randomflags.length), 1)[0];
     gameSquare.setflag(flag);
   });
 }
 // Function to clear the game when all squares are matched.
 function clearGame() {
-  gameSquares.forEach(function (gameSquare) {
+  gameSquares.forEach(function(gameSquare) {
     gameSquare.reset();
   });
-  setTimeout(function () {
+  setTimeout(function() {
     randomizeflags();
   }, 500);
   areOpen = 0;
